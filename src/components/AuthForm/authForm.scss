@@ -1,0 +1,14 @@
+.auth-form-container {
+    background-color: antiquewhite;
+    margin: 10vh 20vw 20vh 20vw;
+    width: 25vw;
+    min-height: 60vh;
+
+    display: flex;
+    flex-direction: column;
+
+    p {
+        font-size: 18px;
+        width: 60%;
+    }
+}
