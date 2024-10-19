@@ -7,11 +7,42 @@
 
     display: flex;
     flex-direction: column;
+    font-family: 'Inter', sans-serif;
 
     p {
         font-size: 18px;
-        width: 60%;
+        width: 70%;
         color: $text-primary;
+    }
+
+    .code-request-link {
+        width: 100%;
+        text-align: center;
+        margin: 16px 0 24px;
+        font-size: 14px;
+        color: $text-quartenery;
+        padding: 0;
+        display: block;
+
+        &.active {
+            background: none;
+            border: none;
+            color: $text-primary;
+            cursor: pointer;
+            padding: 0;
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.2s ease;
+
+            &:hover:not(:disabled) {
+                color: $button-primary;
+            }
+
+            &:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+        }
     }
 }
 
@@ -91,33 +122,5 @@ input {
     &:disabled {
         opacity: 0.6;
         cursor: not-allowed;
-    }
-}
-
-.code-request-link {
-    width: 100%;
-    text-align: center;
-    margin: 16px 0 24px;
-    font-size: 14px;
-    color: $text-primary;
-
-    &.active {
-        background: none;
-        border: none;
-        color: $text-primary;
-        cursor: pointer;
-        padding: 0;
-        font-weight: 600;
-        font-size: 16px;
-        transition: color 0.2s ease;
-
-        &:hover:not(:disabled) {
-            color: $button-primary;
-        }
-
-        &:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
     }
 }

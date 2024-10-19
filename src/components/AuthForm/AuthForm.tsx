@@ -148,6 +148,17 @@ const AuthForm = () => {
                 )}
             </div>
 
+            {!isCodeStep && (
+                <button
+                    type="submit"
+                    className="button-primary"
+                    disabled={isRequestingOtp || isSigningIn}
+                >
+                    Продолжить
+                </button>
+            )}
+
+
             {isCodeStep && (
                 <>
                     <div className="form-group">
@@ -162,6 +173,7 @@ const AuthForm = () => {
                             placeholder="Проверочный код"
                             maxLength={6}
                             className={errors.code ? 'input-error' : 'input-default'}
+                            onChange={handleCodeChange}
                         />
                         {errors.code && (
                             <span className="error-message">{errors.code.message}</span>
@@ -173,7 +185,7 @@ const AuthForm = () => {
                         className="button-primary"
                         disabled={isRequestingOtp || isSigningIn}
                     >
-                        {isCodeStep ? 'Войти' : 'Продолжить'}
+                        Войти
                     </button>
 
                     {canRequestNewCode ? (
@@ -188,7 +200,7 @@ const AuthForm = () => {
                             Запросить код еще раз
                         </button>
                     ) : (
-                        <p className='code-request-link'>Запросить код повторно можно через {countdown} секунд</p>
+                        <p className="code-request-link">Запросить код повторно можно через {countdown} секунд</p>
                     )}
                 </>
             )}
