@@ -1,4 +1,3 @@
-import './App.scss'
 import AuthForm from './components/AuthForm/AuthForm'
 
 function App() {
