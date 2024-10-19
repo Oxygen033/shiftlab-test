@@ -10,7 +10,7 @@ interface AuthFormData {
 }
 
 const AuthForm = () => {
-    const { phone: storedPhone, setPhone, setToken } = useAuthStore();
+    const { phone: storedPhone, setPhone, setToken, reset: resetStore } = useAuthStore();
     const [isCodeStep, setIsCodeStep] = useState(!!storedPhone);
     const [countdown, setCountdown] = useState(0);
     const [canRequestNewCode, setCanRequestNewCode] = useState(false);
@@ -21,9 +21,10 @@ const AuthForm = () => {
     const {
         register,
         handleSubmit,
-        formState: { errors, isDirty },
+        formState: { errors },
         watch,
         setValue,
+        reset: resetForm,
         trigger: triggerValidation,
     } = useForm<AuthFormData>({
         defaultValues: {
@@ -53,6 +54,12 @@ const AuthForm = () => {
         if (!value.startsWith('+')) value = '+' + value;
         setValue('phone', formatPhoneNumber(value), { shouldValidate: true });
         await triggerValidation('phone');
+    };
+
+    //Форматирование для поля кода
+    const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value.replace(/\D/g, '');
+        setValue('code', value, { shouldValidate: true });
     };
 
     //Отправка телефона и получение кода
@@ -86,11 +93,19 @@ const AuthForm = () => {
             });
 
             if (response?.token) {
-                setToken(response.token);
+                setToken(response.token); //Если токен получен в ответе, то сохранить его
             }
         } catch (error) {
             console.error('Error signing in:', error);
         }
+        resetApp();
+    };
+
+    //Сброс всех данных для отладки
+    const resetApp = () => {
+        resetStore();
+        resetForm({ phone: '', code: '' });
+        setIsCodeStep(false);
     };
 
     //Таймер для запроса нового кода
@@ -108,6 +123,8 @@ const AuthForm = () => {
 
     return (
         <form onSubmit={handleSubmit(isCodeStep ? handleLogin : handleContinue)} className="auth-form-container">
+            <h2>Вход</h2>
+            <p>Введите номер телефона для входа в личный кабинет</p>
             <div className="form-group">
                 <input
                     {...register('phone', {
@@ -122,9 +139,9 @@ const AuthForm = () => {
                     })}
                     placeholder="Телефон"
                     onChange={handlePhoneChange}
-                    className={isDirty && errors.phone ? 'error' : ''}
+                    className={errors.phone ? 'input-error' : 'input-default'}
                 />
-                {isDirty && errors.phone && (
+                {errors.phone && (
                     <span className="error-message">
                         {errors.phone.message || 'Поле является обязательным'}
                     </span>
@@ -136,7 +153,7 @@ const AuthForm = () => {
                     <div className="form-group">
                         <input
                             {...register('code', {
-                                required: 'Поле является обязательным',
+                                required: 'Код должен содержать 6 цифр',
                                 pattern: {
                                     value: /^\d{6}$/,
                                     message: 'Код должен содержать 6 цифр'
@@ -144,12 +161,20 @@ const AuthForm = () => {
                             })}
                             placeholder="Проверочный код"
                             maxLength={6}
-                            className={errors.code ? 'error' : ''}
+                            className={errors.code ? 'input-error' : 'input-default'}
                         />
                         {errors.code && (
                             <span className="error-message">{errors.code.message}</span>
                         )}
                     </div>
+
+                    <button
+                        type="submit"
+                        className="button-primary"
+                        disabled={isRequestingOtp || isSigningIn}
+                    >
+                        {isCodeStep ? 'Войти' : 'Продолжить'}
+                    </button>
 
                     {canRequestNewCode ? (
                         <button
@@ -157,24 +182,16 @@ const AuthForm = () => {
                             onClick={() => {
                                 handleContinue({ phone: watch('phone'), code: '' });
                             }}
-                            className="link-button"
+                            className="code-request-link active"
                             disabled={isRequestingOtp}
                         >
                             Запросить код еще раз
                         </button>
                     ) : (
-                        <p>Запросить код повторно можно через {countdown} секунд</p>
+                        <p className='code-request-link'>Запросить код повторно можно через {countdown} секунд</p>
                     )}
                 </>
             )}
-
-            <button
-                type="submit"
-                className="submit-button"
-                disabled={isRequestingOtp || isSigningIn}
-            >
-                {isCodeStep ? 'Войти' : 'Продолжить'}
-            </button>
         </form>
     );
 };

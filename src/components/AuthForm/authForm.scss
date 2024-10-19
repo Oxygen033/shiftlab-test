@@ -1,5 +1,6 @@
+@import '../../variables.scss';
+
 .auth-form-container {
-    background-color: antiquewhite;
     margin: 10vh 20vw 20vh 20vw;
     width: 25vw;
     min-height: 60vh;
@@ -10,5 +11,113 @@
     p {
         font-size: 18px;
         width: 60%;
+        color: $text-primary;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 24px;
+
+    &:last-of-type {
+        margin-bottom: 32px;
+    }
+}
+
+input {
+    padding: 12px 8px 12px 8px;
+    font-size: 16px;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.input-default {
+    border: 1px solid $border-light;
+    color: $text-primary;
+    background: white;
+
+    &:focus {
+        border: 2px solid $indicator-focused;
+    }
+
+    &:hover:not(:focus) {
+        border-color: $border-medium;
+    }
+
+    &::placeholder {
+        color: $text-tertiary;
+    }
+}
+
+.input-error {
+    @extend .input-default;
+    border: 2px solid $indicator-error;
+
+    &:focus {
+        border: 2px solid $indicator-error;
+    }
+}
+
+.error-message {
+    color: $text-error;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.button-primary {
+    height: 48px;
+    padding: 12px 24px;
+    background: $button-primary;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+        background: $button-primary-hover;
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.98);
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+.code-request-link {
+    width: 100%;
+    text-align: center;
+    margin: 16px 0 24px;
+    font-size: 14px;
+    color: $text-primary;
+
+    &.active {
+        background: none;
+        border: none;
+        color: $text-primary;
+        cursor: pointer;
+        padding: 0;
+        font-weight: 600;
+        font-size: 16px;
+        transition: color 0.2s ease;
+
+        &:hover:not(:disabled) {
+            color: $button-primary;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     }
 }
