@@ -17,9 +17,9 @@
 - react-form-hook
 
 ## Зависимости
-NodeJS
-yarn
-docker-compose для запуска через Docker
+- NodeJS > 20
+- yarn
+- docker-compose для запуска через Docker
 
 ## Запуск
 С использованием Docker-compose
